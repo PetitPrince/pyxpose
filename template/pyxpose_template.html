@@ -117,9 +117,6 @@
                         frontColor = "rgb({{ slide['data']['complement_color'][0] }} , {{ slide['data']['complement_color'][1] }}, {{ slide['data']['complement_color'][2]}} )";
                         removeRunTimeCSS()
                         addRunTimeCSS('aside{color:'+frontColor+'; background:'+backColor+'} aside a{color:'+frontColor+'}')
-
-                        //$sidebar.style.backgroundColor = "rgb({{ slide['data']['color'][0] }} , {{ slide['data']['color'][1] }}, {{ slide['data']['color'][2]}} )";
-                        //$sidebar.style.color = "rgb({{ slide['data']['complement_color'][0] }} , {{ slide['data']['complement_color'][1] }}, {{ slide['data']['complement_color'][2]}} )";
                     {% else %}
                         removeRunTimeCSS();
                         addRunTimeCSS('');
@@ -202,4 +199,3 @@
 </article>
 </body>
 </html>
-
