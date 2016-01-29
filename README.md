@@ -10,9 +10,20 @@ Look at the demo to see what it looks like.
 
 Installation
 ------------
-Run pyxpose.exe as a command line application.
+Run pyxpose.exe as a Windows command line application.
 
-Alternatively, you can also run pyxpose.py as a regular python CLI script.
+Alternatively, you can also run pyxpose.py as a regular python CLI script. You will need the following libraries
+
+* docopt
+* jinja2
+* PIL
+* tqdm
+* scipy
+
+If they aren't already installed, run this command to install them all at once:
+```
+pip install docopt jinja2 PIL tqdm scipy
+```
 
 Usage
 -----
@@ -124,3 +135,15 @@ Within the template, you have access to the following variable:
       * `slide['data']['exposure_data']['lens_model']`: (str) Lens model (e.g. "XF35mmF1.4 R")
       * `slide['data']['exposure_data']['camera_maker']`: (str) Camera maker (e.g. "NIKON CORPORATION")
       * `slide['data']['exposure_data']['camera_model']`: (str) Camera model (e.g. ('NIKON D810'))
+
+Generating executable file
+--------------------------
+The stand alone `.exe` file is generated using PyInstaller using:
+
+```
+pyinstaller pyxpose.py
+```
+
+The same command can also produce useable .app files for OSX, but I don't have (yet) such machines at my disposition.
+
+Be aware that PyInstaller *does* create stupidly large file. This is not a problem in the age of stupidly large hard-drives, but still. 
