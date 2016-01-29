@@ -6,7 +6,7 @@ What it does
 -------------
 Pyxpose turns a collection of photo inside a folder into a photoessays with embedded, markdown-formatted captions (if existing).
 
-Look at the demo to see what it looks like.
+[Look at the demo](http://petitprince.github.io/pyxpose-demo/gallery.html) to see what it looks like.
 
 Installation
 ------------
@@ -146,4 +146,4 @@ pyinstaller pyxpose.py
 
 The same command can also produce useable .app files for OSX, but I don't have (yet) such machines at my disposition.
 
-Be aware that PyInstaller *does* create stupidly large file. This is not a problem in the age of stupidly large hard-drives, but still. 
+Be aware that PyInstaller *does* create stupidly large file. This is not a problem in the age of stupidly large hard-drives, but still.
