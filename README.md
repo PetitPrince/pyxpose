@@ -80,6 +80,8 @@ height: 20
 'tis a silly place. And it's only a *model*.
 ```
 
+![Visual explanation of the positioning and sizing of the caption](position_and_size.jpg)
+
 *Note*: Since eye-balling percentage positionning and size is rather difficult, grids overlay for the most common aspect ratios are provided in the overlay folder. In Adobe Photoshop Lightroom, you can display it by going to View > Loupe overlay > Choose layout image (alternatively, ctrl-shift-alt-o). Aditionnaly, some software (in particular Lightroom) will input a new line only if you press ctrl-enter.
 
 Textual slides
@@ -92,7 +94,7 @@ Unprocessed files
 -----------------
 Files prefixed by "_" won't be processed.
 
-Files suffixed with "_private" won't be processed unless the --allowprivate option is invoked.
+Files suffixed with "_private" won't be processed *unless* the --allowprivate option is invoked.
 
 Theme
 ------
