@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ gallery_title }}</title>
+    <meta name="description" content="{{ gallery_description }}" />
+    <link href="style.css" rel="stylesheet" type="text/css"/>
+
+    <script type="text/javascript">
+
+    /* Toggle EXIF and captions with a click*/
+    /* Not in the mood of using jquery for such small stuff; using vanilla JS instead
+    https://gist.github.com/liamcurry/2597326*/
+
+    function addRunTimeCSS (content) {
+      // Inspired by https://developer.mozilla.org/en-US/docs/Web/API/Document/createElement
+      var newDiv = document.createElement('style');
+      newDiv.id = 'runtime_css'
+      var newContent = document.createTextNode(content);
+      newDiv.appendChild(newContent); //add the text node to the newly created div.
+
+      // add the newly created element and its content into the DOM
+      var currentDiv = document.getElementById("runtime_css");
+      document.head.appendChild(newDiv, currentDiv);
+    }
+
+    function removeRunTimeCSS(){
+       var toBeRemoved = document.getElementById("runtime_css")
+       document.head.removeChild(toBeRemoved)
+    }
+
+    function toggleFullScreen() {
+      /* https://developer.mozilla.org/en-US/docs/Web/API/Fullscreen_API */
+      var doc = window.document;
+      var docEl = doc.documentElement;
+
+      var requestFullScreen = docEl.requestFullscreen || docEl.mozRequestFullScreen || docEl.webkitRequestFullScreen || docEl.msRequestFullscreen;
+      var cancelFullScreen = doc.exitFullscreen || doc.mozCancelFullScreen || doc.webkitExitFullscreen || doc.msExitFullscreen;
+
+      if(!doc.fullscreenElement && !doc.mozFullScreenElement && !doc.webkitFullscreenElement && !doc.msFullscreenElement) {
+        requestFullScreen.call(docEl);
+      }
+      else {
+        cancelFullScreen.call(doc);
+      }
+    }
+    document.addEventListener('DOMContentLoaded', function() {
+
+        var exifs = document.querySelectorAll('.exif');
+        var captions = document.querySelectorAll('.caption');
+        var toggleEXIF = document.getElementById('toggleEXIF');
+        var toggleCaptions = document.getElementById('toggleCaptions');
+        var toggleFullscreen = document.getElementById('toggleFullscreen');
+        toggleEXIF.onclick = function(){
+            for (var i = 0; i < exifs.length; i++) {
+              exifs[i].classList.toggle('hidden');
+              }
+                return false;
+            };
+        toggleCaptions.onclick = function(){
+            for (var i = 0; i < captions.length; i++) {
+              captions[i].classList.toggle('hidden');
+              }
+                return false;
+            };
+        toggleFullscreen.onclick = function(){
+           toggleFullScreen()
+         };
+    })
+
+    /* Change sidebar color depending on the scroll state*/
+
+    /* OnScroll with reasonable performance */
+    /* http://joshbroton.com/hooking-up-to-the-window-onscroll-event-without-killing-your-performance/
+       and also: http://ejohn.org/blog/learning-from-twitter/ */
+    var didScroll = false;
+    window.onscroll = activateScroll;
+
+    function activateScroll() {
+        didScroll = true;
+    }
+
+    setInterval(function() {
+        if(didScroll) {
+            didScroll = false;
+
+            var $sidebar = document.getElementsByTagName('aside')[0];
+
+            /*I'm using code to generate code... meh.*/
+            {% for slide in slides %}
+                var $slide_{{ loop.index }} = document.getElementById('slide-{{ loop.index }}');
+            {% endfor%}
+            {% for slide in slides %}
+                {% if not loop.last%}
+                if(window.scrollY >= $slide_{{loop.index}}.offsetTop - $slide_{{loop.index}}.offsetTop/4){
+                    if(window.scrollY < $slide_{{1+loop.index}}.offsetTop - $slide_{{1+loop.index}}.offsetTop/4){
+                        {% if slide['data']['color'] %}
+                            backColor = "rgb({{ slide['data']['color'][0] }} , {{ slide['data']['color'][1] }}, {{ slide['data']['color'][2]}} )";
+                            frontColor = "rgb({{ slide['data']['complement_color'][0] }} , {{ slide['data']['complement_color'][1] }}, {{ slide['data']['complement_color'][2]}} )";
+                            removeRunTimeCSS();
+                            addRunTimeCSS('aside{color:'+frontColor+'; background:'+backColor+'} aside a{color:'+frontColor+'} .caption a{border-color: '+frontColor+' !important}');
+                            // $sidebar.style.backgroundColor = "rgb({{ slide['data']['color'][0] }} , {{ slide['data']['color'][1] }}, {{ slide['data']['color'][2]}} )";
+                            // $sidebar.style.color = "rgb({{ slide['data']['complement_color'][0] }} , {{ slide['data']['complement_color'][1] }}, {{ slide['data']['complement_color'][2]}} )";
+
+                        {% else %}
+                            removeRunTimeCSS();
+                            addRunTimeCSS('');
+                            $sidebar.style.backgroundColor = "";
+                            $sidebar.style.color = "";
+                        {% endif %}
+                        }
+                    }
+                {% else %}
+                if(window.scrollY >= $slide_{{loop.index}}.offsetTop){
+                    {% if slide['data']['color'] %}
+                        backColor = "rgb({{ slide['data']['color'][0] }} , {{ slide['data']['color'][1] }}, {{ slide['data']['color'][2]}} )";
+                        frontColor = "rgb({{ slide['data']['complement_color'][0] }} , {{ slide['data']['complement_color'][1] }}, {{ slide['data']['complement_color'][2]}} )";
+                        removeRunTimeCSS()
+                        addRunTimeCSS('aside{color:'+frontColor+'; background:'+backColor+'} aside a{color:'+frontColor+'}')
+
+                        //$sidebar.style.backgroundColor = "rgb({{ slide['data']['color'][0] }} , {{ slide['data']['color'][1] }}, {{ slide['data']['color'][2]}} )";
+                        //$sidebar.style.color = "rgb({{ slide['data']['complement_color'][0] }} , {{ slide['data']['complement_color'][1] }}, {{ slide['data']['complement_color'][2]}} )";
+                    {% else %}
+                        removeRunTimeCSS();
+                        addRunTimeCSS('');
+                        $sidebar.style.backgroundColor = "";
+                        $sidebar.style.color = "";
+                    {% endif %}
+                }
+
+                {% endif%}
+            {% endfor %}
+
+        }
+    }, 100);
+    </script>
+
+    <style id="runtime_css">
+    </style>
+
+</head>
+
+<body>
+<aside>
+  <!--
+  <div class="branding">
+      ⁋
+  </div>
+  -->
+  <div class="galery-title">
+      <h1>{{ gallery_title }}</h1>
+  </div>
+    {{ sidebar }}
+  <div class="actionable">
+    <ul>
+      <li><a id="toggleFullscreen" href="#">Toggle fullscreen</a></li>
+      <li><a id="toggleCaptions" href="#">Toggle captions</a></li>
+      <li><a id="toggleEXIF" href="#">Toggle EXIF</a></li>
+    </ul>
+  </div>
+</aside>
+
+<article>
+    {% for slide in slides %}
+            {% if slide['type'] == 'text'%}
+        <div class="slide text" id="slide-{{loop.index}}">
+                {{ slide['data'] }}
+            {% elif slide['type'] == 'photo'%}
+        <div class="slide photo" id="slide-{{loop.index}}">
+                {% if slide['data']['exposure_data'] %}
+            <p class="exif hidden">
+                {% if slide['data']['exposure_data']['aperture'] %}
+                ƒ/<span class="exif-value">{{ slide['data']['exposure_data']['aperture'] }}</span> |
+                {% endif %}
+                {% if slide['data']['exposure_data']['exposure_time'] %}
+                <span class="exif-value">{{ slide['data']['exposure_data']['exposure_time'] }}</span>s |
+                {% endif %}
+                {% if slide['data']['exposure_data']['iso'] %}
+                <span class="smallcaps">iso</span> <span class="exif-value">{{ slide['data']['exposure_data']['iso'] }}</span> |
+                {% endif %}
+                {% if slide['data']['exposure_data']['focal_length'] %}
+                <span class="exif-value">{{ slide['data']['exposure_data']['focal_length'] }}</span>mm
+                {% endif %}
+            </p>
+                {% endif %}
+            {% if slide['data']['caption']%}
+            <div class="caption {% if slide['data']['caption_meta']['class']%} {{ slide['data']['caption_meta']['class'] }} {% endif %}" style="top: {{slide['data']['caption_meta']['top']}}%; left: {{slide['data']['caption_meta']['left']}}%; width: {{slide['data']['caption_meta']['width']}}%; height: {{slide['data']['caption_meta']['height']}}%; {% if slide['data']['caption_meta']['class']%} {{slide['data']['caption_meta']['style']}} {% endif %}">
+                {% if slide['data']['caption'] %}
+                    {{ slide['data']['caption'] }}
+                {% endif %}
+            </div>
+            {% endif %}
+
+            <img srcset ="img/{{slide['data']['filename'] ~ '-1920.jpg 1920w'}}, img/{{slide['data']['filename'] ~ '-1280.jpg 1280w'}}, img/{{slide['data']['filename'] ~ '-1024.jpg 1024w'}}, img/{{slide['data']['filename'] ~ '-640.jpg 640w'}}"
+                 sizes="85vw"
+                 src="img/{{ slide['data']['filename']~'-1280.jpg' }}"
+            />
+
+            {% endif %}
+        </div>
+    {% endfor %}
+</article>
+</body>
+</html>
+
