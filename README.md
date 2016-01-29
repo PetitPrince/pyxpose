@@ -1,6 +1,6 @@
 pyxpose
 =======
-A static site generator for photoessays, inspired by (Exposé)[https://github.com/Jack000/Expose].
+A static site generator for photoessays, inspired by [Exposé](https://github.com/Jack000/Expose).
 
 What it does
 -------------
@@ -39,7 +39,7 @@ You can customize the page title along with the sidebar by adding a gallery-desc
 title: <Title of your gallery> (optional, default to: "Photo gallery")
 short-description: <Short description appearing in search engines> (optional, default to an empty field ("") )
 
-<Sidebar content formatted in (Markdown)[https://en.wikipedia.org/wiki/Markdown]>
+<Sidebar content formatted in [Markdown](https://en.wikipedia.org/wiki/Markdown)>
 ```
 
 Example:
@@ -66,7 +66,7 @@ left: <position of the text block relative to the left of the photo (percent)>
 width: <width of the text block(percent)>
 height: <width of the text block(percent)>
 
-<Caption content formatted in (Markdown)[https://en.wikipedia.org/wiki/Markdown]>
+<Caption content formatted in [Markdown](https://en.wikipedia.org/wiki/Markdown)>
 ```
 
 Example:
@@ -96,28 +96,29 @@ Files suffixed with "_private" won't be processed unless the --allowprivate opti
 
 Theme
 ------
-Don't like how the default theme look like ? Write your own ! It is using the (jinja2 templating engine)[http://jinja.pocoo.org/]. See its (doc to design your own template)[http://jinja.pocoo.org/docs/dev/templates/].
+Don't like how the default theme look like ? Write your own ! It is using the [jinja2 templating engine](http://jinja.pocoo.org/). See its [documentation to design your own template](http://jinja.pocoo.org/docs/dev/templates/).
 
 Within the template, you have access to the following variable:
-
-* {{ gallery_title }} : (String) The gallery title
-* {{ gallery_description }} : (String) The gallery short description
-* {{ slides }}:
-  * slide['type'] : (String, 'photo' or 'text') A string describing if the slide is a photo or just text.
-  * slide['data'] : (String or dict) If the slide is just text, contains the actual text. Otherwise it's a dict containing:
-    * slide['data']['filename'] : (String) the filename of the photo
-    * slide['data']['caption']: (String) Text data of the caption
-    * slide['data']['caption_meta']:
-      * slide['data']['caption_meta']['top']
-      * slide['data']['caption_meta']['left']
-      * slide['data']['caption_meta']['width']
-      * slide['data']['caption_meta']['height']
-    * slide['data']['exposure_data']:
-      * slide['data']['exposure_data']['aperture']
-      * slide['data']['exposure_data']['exposure_time']
-      * slide['data']['exposure_data']['iso']
-      * slide['data']['exposure_data']['focal_length']
-      * slide['data']['exposure_data']['lens_maker']
-      * slide['data']['exposure_data']['lens_model']
-      * slide['data']['exposure_data']['camera_maker']
-      slide['data']['exposure_data']['camera_model']
+* `gallery_title` : (str) Gallery title
+* `gallery_description` : (str) Gallery short description
+* `slides`:
+  * `slide['type']` : (str, 'photo' or 'text') A string describing if the slide is a photo or just text.
+  * slide['data']` : (str or dict) If the slide is just text, contains the actual text. Otherwise it's a dict containing:
+    * `slide['data']['filename']` : (str) Filename of the photo
+    * `slide['data']['color']`: (list) rgb value of the second most most common color. Access with slide['data']['color'][0], slide['data']['color'][1] and slide['data']['color'][2].
+    * `slide['data']['complement_color']`: (list) rgb value of the second most most common color, with a different luminance Useful for text. Access is the same as `color`.
+    * `slide['data']['caption']`: (str) Text data of the caption
+    * `slide['data']['caption_meta']`: (dict) holds information about where the caption textbox should be
+      * `slide['data']['caption_meta']['top']` (int) position from top, in percent
+      * `slide['data']['caption_meta']['left']` (int) position from left, in percent
+      * `slide['data']['caption_meta']['width']` (int) width, in percent
+      * `slide['data']['caption_meta']['height']` (int) height, in percent
+    * `slide['data']['exposure_data']`: (dict) holds information about how the photo was taken
+      * `slide['data']['exposure_data']['aperture']`: (str) Aperture in decimal form (e.g. "2.8")
+      * `slide['data']['exposure_data']['exposure_time']`: (str) Shutter speed in fractional form (e.g. "1/60")
+      * `slide['data']['exposure_data']['iso']`: (str) ISO
+      * `slide['data']['exposure_data']['focal_length']`: (str) Focal length
+      * `slide['data']['exposure_data']['lens_maker']`: (str)  Lens maker (e.g. "FUJIFILM")
+      * `slide['data']['exposure_data']['lens_model']`: (str) Lens model (e.g. "XF35mmF1.4 R")
+      * `slide['data']['exposure_data']['camera_maker']`: (str) Camera maker (e.g. "NIKON CORPORATION")
+      * `slide['data']['exposure_data']['camera_model']`: (str) Camera model (e.g. ('NIKON D810'))
