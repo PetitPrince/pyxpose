@@ -135,8 +135,6 @@ color: #161616;
 
 article .caption.dark{
 color: #161616;
-}
-article .caption.dark:hover {
 text-shadow: 0.1em 0.1em 0.2em #e8e8e8
 }
 
@@ -151,8 +149,6 @@ border-bottom: 0.05em dashed #161616;
 
 article .caption.light{
 color: #e8e8e8;
-}
-article .caption.light:hover,article .caption:hover {
 text-shadow: 0.1em 0.1em 0.2em #161616
 }
 
