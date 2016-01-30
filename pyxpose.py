@@ -27,8 +27,7 @@ import scipy.misc
 import scipy.cluster
 import math
 import shutil
-import re
-import fileinput
+import natsort
 from tqdm import tqdm
 from PIL import Image
 from PIL.ExifTags import TAGS
@@ -288,7 +287,7 @@ if __name__ == '__main__':
         print('Warning: "gallery-description.(txt|md)"  not found, using default gallery name and description')
 
     slides = []
-    for filename in tqdm(sorted(file_list)):
+    for filename in tqdm(natsort.natsorted(file_list)):
         # Get type of the slide: text or photo ?
         # Text
         if os.path.splitext(filename)[1] == '.txt' or os.path.splitext(filename)[1] == '.md':
