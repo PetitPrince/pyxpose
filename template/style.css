@@ -123,6 +123,8 @@ padding:1em;
 
 article .slide .caption {
 font-size:1.25vw;
+color: #e8e8e8;
+text-shadow: 0.1em 0.1em 0.2em #161616;
 }
 
 article .slide .caption h1 {

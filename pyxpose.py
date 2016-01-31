@@ -3,12 +3,11 @@
 
 Usage:
   pyxpose.py <gallery-path>
-  pyxpose.py <gallery-path> --template=<template-path> --private
+  pyxpose.py <gallery-path> --template=<template-path>
   pyxpose.py (-h | --help)
 
 Options:
   --template=<template-path>    Define another template [default: ./template/]
-  --private                     Display files suffixed by _private.
   -h --help                     Show this screen.
 
 """
@@ -247,8 +246,8 @@ if __name__ == '__main__':
     file_list = file_list_jpg + file_list_txt + file_list_md
     if not os.path.exists('./img/'):
         os.makedirs('./img/')
-    if not os.path.exists('./font/'):
-        os.makedirs('./font/')
+    if not os.path.exists('./fonts/'):
+        os.makedirs('./fonts/')
     # Exclude thumbnails
     file_list = [fn for fn in file_list if not os.path.basename(fn).endswith('-1920.jpg')]
     file_list = [fn for fn in file_list if not os.path.basename(fn).endswith('-1280.jpg')]
@@ -261,14 +260,6 @@ if __name__ == '__main__':
     file_list = [fn for fn in file_list if not os.path.basename(fn).endswith('gallery-description.md')]
     file_list = [fn for fn in file_list if not os.path.basename(fn).endswith('_gallery-description.txt')]
     file_list = [fn for fn in file_list if not os.path.basename(fn).endswith('_gallery-description.md')]
-
-    # Exclude private files
-    if arguments['--private'] is False:
-        file_list = [fn for fn in file_list if not os.path.basename(fn).endswith('_private.md')]
-        file_list = [fn for fn in file_list if not os.path.basename(fn).endswith('_private.txt')]
-        file_list = [fn for fn in file_list if not os.path.basename(fn).endswith('_private.jpg')]
-        file_list = [fn for fn in file_list if not os.path.basename(fn).endswith('_private.jpg')]
-
 
     # Exclude files beginning with '_'
     file_list = [fn for fn in file_list if not os.path.basename(fn).startswith('_')]
@@ -332,23 +323,47 @@ if __name__ == '__main__':
 
             # Append to list
             slide = {'type': 'photo', 'data': photo_metadata}
+            if filename.endswith('_private.jpg'):
+                slide['is_public'] = False
+            else:
+                slide['is_public'] = True
+
             slides.append(slide)
 
+
+
     templateLoader = jinja2.FileSystemLoader(TEMPLATE_DIR) # where the template file is
+
+    def isPublic(s):
+        if 'is_public' in s.keys():
+            return s['is_public']
+        else:
+            raise ValueError
+
     templateEnv = jinja2.Environment(loader=templateLoader)
     TEMPLATE_FILE = "pyxpose_template.html"
     template = templateEnv.get_template(TEMPLATE_FILE)
 
-    templateVars = {'gallery_title': gallery_title,
+    templateVars_public = {'gallery_title': gallery_title,
                     'gallery_description': gallery_description,
                     'slides': slides,
                     'sidebar': sidebar_content}
-
-    outputText = template.render(templateVars)
-
-    print('Gallery saved to: '+ os.getcwd())
+    outputText_public = template.render(templateVars_public)
+    print('Galleries saved to: ' + os.getcwd())
     ff = open('gallery.html', 'w', encoding='utf-8')
-    ff.write(outputText)
+    ff.write(outputText_public)
+
+    slides_without_private = [slide for slide in slides if isPublic(slide)]
+    if not len(slides_without_private) == len(slides):
+        templateVars_private = {'gallery_title': gallery_title,
+                        'gallery_description': gallery_description,
+                        'slides': slides_without_private,
+                        'sidebar': sidebar_content}
+        outputText_private = template.render(templateVars_private)
+        ff = open('gallery_private.html', 'w', encoding='utf-8')
+        ff.write(outputText_private)
+
+
     shutil.copy(TEMPLATE_DIR + "/style.css", DATADIR)
     if not os.path.exists(DATADIR+'/fonts/'):
         os.makedirs(DATADIR+'/fonts/')

@@ -101,11 +101,11 @@ Text (.txt) or Markdown (.md) files will be processed and displayed as slides wi
 
 This is handy to display some embedded maps. You might want to pay attention to the `width`, `height` and `style` attribute of the iframe. In the `style` attribute, I usually set `float: left;` and  `margin-left: 1em` so that the map stays on the left and doesn't stick to the text at the right. HTML and CSS is out of the scope of this readme; if you want to learn more, I suggest [this tutorial by Shay How](http://learn.shayhowe.com/).
 
-Unprocessed files
------------------
+Unprocessed and private files
+-----------------------------
 Files prefixed by "_" won't be processed.
 
-Files suffixed with "_private" won't be processed *unless* the --allowprivate option is invoked.
+Files suffixed with "_private" won't be included in the gallery. A second html file that include them will be generated instead.
 
 Theme
 ------
