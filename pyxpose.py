@@ -285,8 +285,11 @@ if __name__ == '__main__':
             input_file = open(filename, mode="r",encoding='utf-8')
             slide_md = md.convert(input_file.read())
             slide = {'type': 'text', 'data': slide_md}
+            if filename.endswith('_private.jpg'):
+                slide['is_public'] = False
+            else:
+                slide['is_public'] = True
             slides.append(slide)
-            pass
         # Photo
         elif os.path.splitext(filename)[1] == '.jpg':
             im = Image.open(filename)
