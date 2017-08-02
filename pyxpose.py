@@ -221,8 +221,8 @@ def process_gallery_description(input_file_gallery_description):
 
 if __name__ == '__main__':
     arguments = docopt(__doc__)
-    DATADIR = arguments['<gallery-path>']
-    TEMPLATE_DIR = arguments['--template']
+    DATADIR = os.path.abspath(arguments['<gallery-path>'])
+    TEMPLATE_DIR = os.path.abspath(arguments['--template'])
     try:
         os.chdir(TEMPLATE_DIR)
         TEMPLATE_DIR = os.getcwd()
